@@ -1,0 +1,151 @@
+Go & web browsers
+Can javascript call Go function directly ?
+
+Zlatko Bratković
+zbratkovic@haproxy.com
+
+* .............. Spoiler
+
+.image https://regmedia.co.uk/2016/10/13/nopestamp.jpg?x=442&y=293&crop=1 _ 100
+.image https://i.kym-cdn.com/entries/icons/facebook/000/028/596/dsmGaKWMeHXe9QuJtq_ys30PNfTGnMsRuHuo_MUzGCg.jpg _ 350
+
+* Problem / Challenge
+
+Write simple app for copying images from memory card
+
+- multiplatform
+- auto start when new drive is detected
+- start web UI
+- "Start" command (with folder choice)
+- monitor progress
+
+.image webapp.png
+
+
+*  Communication
+
+- REST API
+- OpenAPI
+- gRPC
+- WebSocket
+- long polling
+- SSE
+- ?
+
+* Topic
+
+- write `struct` and expose functions
+- Receive  `events` from backend
+
+* Bind wishlist #1
+
+.code bind_example_small.go
+
+* Bind wishlist #2
+
+.code bind_example_small2.go
+
+* Bind usage
+
+.code bind_example.go
+
+* Go - reflect
+
+Name of ths struct - get functions
+
+  structureName, err := getType(structure)
+
+Info about methods
+
+  structType := reflect.TypeOf(structure)
+  structType.NumMethod()
+  method := structType.Method(i)
+
+* Go - reflect - get arguments
+
+  method := structType.Method(i)
+  numIn := method.Type.NumIn()
+
+  inV := method.Type.In(i)
+  in_Kind := inV.Kind() // func
+
+  switch in_Kind {
+  case reflect.String:
+      in = append(in, reflect.ValueOf(args[i-argsShift]))
+  case reflect.Int:
+      x, err := strconv.Atoi(args[i-argsShift]) // ...
+      in = append(in, reflect.ValueOf(x))
+  case reflect.Int64:
+  .... . . . . .
+
+  values := method.Func.Call(in)
+
+* Bind - creating
+
+.code bind_how_1.go
+.code bind_how_2.go
+
+* Bind - user action - extract params
+
+.code bind_how_3.go
+
+* Bind - calling method
+
+.code bind_how_4.go
+
+* Bind - calling method #2
+
+.code bind_how_5.go
+
+* Real world Usage ?
+
+Pro
+- simple
+- no need to write complex apis
+
+Con
+- arguments of func needs to be in order, not by name
+- not standardized
+- WebSockets exists
+
+* Events
+
+.code event_idea.go
+* Events
+
+.code event_idea2.go
+
+* Events from backend
+
+Only one channel, meta data for id & event
+
+.code event_example.go
+
+* Events from backend
+
+.code event_example_2a.go
+.code event_example_2b.go
+
+* Events from backend
+
+.code event_example_3.go
+
+* Javascript
+
+.code event_clients.js
+
+* Real world Usage ?
+
+Pro
+- SSE compatible
+
+Con
+- history package very simple
+- ?
+
+* oktalz/go-sse
+
+Go package available at [[https://github.com/oktalz/go-sse][github.com/oktalz/go-sse]]
+Presentation at [[https://talks.godoc.org/github.com/oktalz/go-sse/presentation/present.slide#1][talks.godoc.org]]
+
+* Q & A
